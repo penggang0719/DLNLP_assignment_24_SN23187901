@@ -4,7 +4,9 @@ import json
 import random
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
 
 import torch
 from torch.utils.data import Dataset
@@ -147,7 +149,7 @@ def evaluate(model, data_loader):
     return total_loss / len(data_loader), accuracy, predictions, true_labels
 
 
-def plot_length_distribution(train_lengths, test_lengths):
+def plot_length_distribution(train_lengths, test_lengths,filepath):
     plt.figure(figsize=(10, 5))
     plt.hist(train_lengths, bins=30, alpha=0.5, label='Train')
     plt.hist(test_lengths, bins=30, alpha=0.5, label='Test')
@@ -155,4 +157,16 @@ def plot_length_distribution(train_lengths, test_lengths):
     plt.xlabel('Length')
     plt.ylabel('Frequency')
     plt.legend(loc='upper right')
+    plt.savefig(filepath)
+    plt.show()
+
+
+def plot_confusion_matrix(true_labels, predictions, filepath):
+    cm = confusion_matrix(true_labels, predictions)
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Confusion Matrix')
+    plt.savefig(filepath)
     plt.show()
